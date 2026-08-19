@@ -1,0 +1,37 @@
+services:
+  clinic_care_service:
+    image: ${REGISTRY_URL:-local}/${IMAGE_NAME:-clinic_care_service}:${IMAGE_TAG:-latest}
+    container_name: clinic_care_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/opt/venv/bin/python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8090/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+      - HTTP_DEFAULT_TIMEOUT=60.0
+      - HTTP_MAX_CONCURRENT=10
+      - CACHE_MAX_SIZE=10000
+      - CACHE_TTL_SECONDS=3600
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ../database/migrations:/database/migrations:ro
+    networks:
+      - network
+    extra_hosts:
+      - "docker.internal:127.0.0.1"
+
+networks:
+  network:
+    name: clinic_care_network
+    external: true
