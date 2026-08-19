@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     database_url: str
     log_level: str = "INFO"
     cors_origins: list[str] = ["http://localhost:3000"]
+    jwt_secret: str = "change-me"
+    jwt_algorithm: str
+    jwt_expires_minutes: int = 8 * 60
 
 
 @lru_cache
