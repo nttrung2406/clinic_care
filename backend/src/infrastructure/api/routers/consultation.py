@@ -6,11 +6,14 @@ from src.domain.entities import Consultation
 from src.domain.exceptions import UnknownDiagnosisCodeError
 from src.infrastructure.api.deps import (
     get_create_consultation_use_case,
+    get_current_doctor,
     get_list_consultations_use_case,
 )
 from src.infrastructure.api.schemas import ConsultationCreate, ConsultationOut
 
-router = APIRouter(prefix="/consultation", tags=["consultation"])
+router = APIRouter(
+    prefix="/consultation", tags=["consultation"], dependencies=[Depends(get_current_doctor)]
+)
 
 
 def _to_out(consultation: Consultation) -> ConsultationOut:
