@@ -57,8 +57,10 @@ function removeCode(code: string) {
     <input v-model="query" type="text" placeholder="Search ICD-10 code or description…" />
     <p v-if="loading" class="hint">Searching…</p>
     <ul v-if="results.length" class="picker-results">
-      <li v-for="item in results" :key="item.code" @click="addCode(item)">
-        <strong>{{ item.code }}</strong> — {{ item.description }}
+      <li v-for="item in results" :key="item.code">
+        <button type="button" class="picker-option" @click="addCode(item)">
+          <strong>{{ item.code }}</strong> — {{ item.description }}
+        </button>
       </li>
     </ul>
   </div>
@@ -99,12 +101,22 @@ function removeCode(code: string) {
 }
 
 .picker-results li {
-  padding: 0.4rem 0.65rem;
-  cursor: pointer;
-  font-size: 0.9rem;
+  margin: 0;
 }
 
-.picker-results li:hover {
+.picker-option {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.65rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.picker-option:hover {
   background: #f1f5f9;
 }
 </style>

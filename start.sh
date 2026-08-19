@@ -54,7 +54,10 @@ start_frontend() {
   echo "==> Starting frontend service"
   mkdir -p "$LOG_DIR"
   pushd "$ROOT_DIR/frontend" >/dev/null
-  [[ -d node_modules ]] || npm install
+  if [[ ! -x node_modules/.bin/nuxt ]]; then
+    echo "==> Installing frontend dependencies"
+    npm install
+  fi
   nohup npm run dev > "$FRONTEND_LOG" 2>&1 &
   echo $! > "$FRONTEND_PID_FILE"
   popd >/dev/null

@@ -41,10 +41,10 @@ async function onSubmit() {
         <input v-model="patientName" type="text" required />
       </label>
 
-      <label>
-        Diagnosis codes
+      <div class="field">
+        <span>Diagnosis codes</span>
         <DiagnosisCodePicker v-model="diagnosisCodes" />
-      </label>
+      </div>
 
       <label>
         Notes
