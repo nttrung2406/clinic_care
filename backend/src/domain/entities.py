@@ -17,3 +17,10 @@ class Consultation:
     diagnosis_codes: list[str] = field(default_factory=list)
     id: int | None = None
     created_at: datetime | None = None
+
+
+@dataclass(frozen=True)
+class Doctor:
+    id: int
+    username: str
+    password_hash: str
