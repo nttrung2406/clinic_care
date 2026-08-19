@@ -1,11 +1,12 @@
 from sqlalchemy import or_
 from sqlmodel import Session, select
 
-from src.domain.entities import Consultation, DiagnosisCode
+from src.domain.entities import Consultation, DiagnosisCode, Doctor
 from src.infrastructure.db.models import (
     ConsultationDiagnosisCodeModel,
     ConsultationModel,
     DiagnosisCodeModel,
+    DoctorModel,
 )
 
 
@@ -90,3 +91,15 @@ class SqlConsultationRepository:
                 )
             )
         return results
+
+
+class SqlDoctorRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def get_by_username(self, username: str) -> Doctor | None:
+        statement = select(DoctorModel).where(DoctorModel.username == username)
+        row = self.session.exec(statement).first()
+        if row is None:
+            return None
+        return Doctor(id=row.id, username=row.username, password_hash=row.password_hash)
