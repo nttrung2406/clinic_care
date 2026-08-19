@@ -31,8 +31,18 @@ wait_for_database() {
 
 run_migrations() {
   echo "==> Running database migrations"
+
+  local admin_env=()
+  if [[ -f "$ROOT_DIR/database/.env" ]]; then
+    local admin_username admin_password_hash
+    admin_username="$(grep -E '^ADMIN_USERNAME=' "$ROOT_DIR/database/.env" | cut -d= -f2-)"
+    admin_password_hash="$(grep -E '^ADMIN_PASSWORD_HASH=' "$ROOT_DIR/database/.env" | cut -d= -f2-)"
+    [[ -n "$admin_username" ]] && admin_env+=(-e "ADMIN_USERNAME=$admin_username")
+    [[ -n "$admin_password_hash" ]] && admin_env+=(-e "ADMIN_PASSWORD_HASH=$admin_password_hash")
+  fi
+
   "${BACKEND_COMPOSE[@]}" run --rm --no-deps --entrypoint /opt/venv/bin/python \
-    clinic_care_service -m alembic upgrade head
+    "${admin_env[@]}" clinic_care_service -m alembic upgrade head
 }
 
 start_backend() {
