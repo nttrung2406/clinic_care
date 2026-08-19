@@ -1,11 +1,12 @@
 <template>
   <div class="app-shell">
-    <header class="app-header">
+    <header v-if="isLoggedIn" class="app-header">
       <h1>ClinicCare Mini EMR</h1>
       <nav>
         <NuxtLink to="/consultations">Consultations</NuxtLink>
         <NuxtLink to="/consultations/new">New Consultation</NuxtLink>
         <NuxtLink to="/search">Search</NuxtLink>
+        <a href="#" @click.prevent="onLogout">Logout</a>
       </nav>
     </header>
     <main class="app-main">
@@ -13,6 +14,15 @@
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+const { isLoggedIn, logout } = useAuth()
+
+async function onLogout() {
+  logout()
+  await navigateTo('/login')
+}
+</script>
 
 <style>
 * {
