@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 
 from src.config import get_settings
 from src.domain.exceptions import DomainError
-from src.infrastructure.api.routers import consultation, diagnosis, health
+from src.infrastructure.api.routers import auth, consultation, diagnosis, health
 
 
 def create_app() -> FastAPI:
@@ -24,6 +24,7 @@ def create_app() -> FastAPI:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
 
     app.include_router(health.router)
+    app.include_router(auth.router)
     app.include_router(diagnosis.router)
     app.include_router(consultation.router)
 
