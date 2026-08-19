@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Query
 
 from src.application.use_cases.search_diagnosis_codes import SearchDiagnosisCodes
-from src.infrastructure.api.deps import get_search_diagnosis_codes_use_case
+from src.infrastructure.api.deps import get_current_doctor, get_search_diagnosis_codes_use_case
 from src.infrastructure.api.schemas import DiagnosisCodeOut
 
-router = APIRouter(prefix="/diagnosis", tags=["diagnosis"])
+router = APIRouter(prefix="/diagnosis", tags=["diagnosis"], dependencies=[Depends(get_current_doctor)])
 
 
 @router.get("", response_model=list[DiagnosisCodeOut])
